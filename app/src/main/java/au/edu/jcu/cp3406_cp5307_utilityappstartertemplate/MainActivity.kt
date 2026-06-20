@@ -53,7 +53,7 @@ fun UtilityAppPreview() {
 
 @Composable
 fun UtilityApp() {
-    var selectedTab by remember { mutableStateOf("Utility") }
+    var selectedTab by remember { mutableStateOf("Home") }
     val viewModel: CryptoViewModel = viewModel()
 
     Scaffold(
@@ -90,7 +90,7 @@ fun UtilityScreen(viewModel: CryptoViewModel) {
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
         Text(text = "CryptoTracker", style = MaterialTheme.typography.headlineMedium)
 
-        Text(text = "Live cryptocurrency prices", style = MaterialTheme.typography.bodyMedium)
+        Text(text = "Live cryptocurrency prices of the TOP 10 coins", style = MaterialTheme.typography.bodyMedium)
 
         Spacer(modifier = Modifier.padding(8.dp))
 
