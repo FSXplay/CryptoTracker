@@ -8,18 +8,20 @@ import retrofit2.http.Query
 interface CoinGeckoApi {
     @GET("coins/markets")
     suspend fun getMarkets(
-        @Query("vs_currency") vsCurrency: String,
-        @Query("per_page") perPage: Int = 10
+            @Query("vs_currency") vsCurrency: String,
+            @Query("per_page") perPage: Int = 10,
+            @Query("price_change_percentage") priceChangePercentage: String = "24h,7d,30d,1y"
     ): List<CoinPrice>
 }
 
 class CryptoRepository {
 
-    private val api: CoinGeckoApi = Retrofit.Builder()
-        .baseUrl("https://api.coingecko.com/api/v3/")
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-        .create(CoinGeckoApi::class.java)
+    private val api: CoinGeckoApi =
+            Retrofit.Builder()
+                    .baseUrl("https://api.coingecko.com/api/v3/")
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build()
+                    .create(CoinGeckoApi::class.java)
 
     suspend fun getTopCoins(currency: String): List<CoinPrice> {
         return api.getMarkets(vsCurrency = currency)

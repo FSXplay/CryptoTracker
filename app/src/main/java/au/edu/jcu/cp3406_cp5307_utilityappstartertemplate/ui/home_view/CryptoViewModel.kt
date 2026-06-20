@@ -22,9 +22,9 @@ class CryptoViewModel(
     var isLoading by mutableStateOf(false)
         private set
 
-//    init {
-//        loadCoins()
-//    }
+   init {
+       loadCoins()
+   }
 
     fun updateCurrency(newCurrency: String) {
         currency = newCurrency
