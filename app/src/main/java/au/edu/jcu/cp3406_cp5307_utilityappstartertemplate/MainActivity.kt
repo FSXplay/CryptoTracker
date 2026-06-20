@@ -28,7 +28,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import au.edu.jcu.cp3406_cp5307_utilityappstartertemplate.ui.CryptoViewModel
 import au.edu.jcu.cp3406_cp5307_utilityappstartertemplate.ui.theme.CP3406_CP5603UtilityAppStarterTemplateTheme
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,6 +57,7 @@ fun UtilityAppPreview() {
 @Composable
 fun UtilityApp() {
     var selectedTab by remember { mutableStateOf("Utility") }
+    val viewModel: CryptoViewModel = viewModel()
 
     Scaffold(
         bottomBar = {
@@ -74,40 +79,47 @@ fun UtilityApp() {
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
             when (selectedTab) {
-                "Utility" -> UtilityScreen()
-                "Settings" -> SettingsScreen()
+                "Utility" -> UtilityScreen(viewModel)
+                "Settings" -> SettingsScreen(viewModel)
             }
         }
     }
 }
 
 @Composable
-fun UtilityScreen() {
-    var counter by remember { mutableIntStateOf(0) }
-
+fun UtilityScreen(viewModel: CryptoViewModel) {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(24.dp),
+        modifier = Modifier.fillMaxSize().padding(24.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Text("Utility Screen", style = MaterialTheme.typography.headlineMedium)
-        Text("Counter: $counter", style = MaterialTheme.typography.bodyLarge)
+        Text("CryptoTracker", style = MaterialTheme.typography.headlineMedium)
 
-        Button(onClick = { counter++ }) {
-            Text("Increment")
+        if (viewModel.isLoading) {
+            Text("Loading...")
+        } else {
+            LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                items(viewModel.coins) { coin ->
+                    Text("${coin.name}: ${viewModel.currency.uppercase()} ${coin.currentPrice}")
+                }
+            }
         }
     }
 }
 
 @Composable
-fun SettingsScreen() {
+fun SettingsScreen(viewModel: CryptoViewModel) {
     Column(
-        Modifier
-            .fillMaxSize()
-            .padding(24.dp), Arrangement.spacedBy(16.dp)
+        Modifier.fillMaxSize().padding(24.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Text("Settings Screen", style = MaterialTheme.typography.headlineMedium)
-        Text("This is where you can add toggles or preferences.")
+        Text("Currency: ${viewModel.currency.uppercase()}")
+
+        Button(onClick = { viewModel.updateCurrency("usd") }) {
+            Text("Use USD")
+        }
+        Button(onClick = { viewModel.updateCurrency("eur") }) {
+            Text("Use EUR")
+        }
     }
 }
