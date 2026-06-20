@@ -13,12 +13,15 @@ class CryptoViewModel(
     private val repository: CryptoRepository = CryptoRepository()
 ) : ViewModel() {
 
+    // The type of coins (e.g. Bitcoin, Ethereum)
     var coins by mutableStateOf<List<CoinPrice>>(emptyList())
         private set
 
+    // The currency, SGD by default
     var currency by mutableStateOf("sgd")
         private set
 
+    // Loading the screen why fetching market data from coingecko API
     var isLoading by mutableStateOf(false)
         private set
 
@@ -30,6 +33,7 @@ class CryptoViewModel(
         currency = newCurrency
         loadCoins()
     }
+
 
     private fun loadCoins() {
         viewModelScope.launch {

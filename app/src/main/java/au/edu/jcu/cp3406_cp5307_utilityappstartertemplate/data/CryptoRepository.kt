@@ -5,6 +5,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
 
+// Uses CoinGecko `/coins/markets` to fetch top market data in the selected fiat currency.
 interface CoinGeckoApi {
     @GET("coins/markets")
     suspend fun getMarkets(
